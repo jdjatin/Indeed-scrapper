@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Map Example</title>
+        <script src="https://maps.googleapis.com/maps/api/js?key={{apiKey}}"></script>
+<script>
+        document.addEventListener("DOMContentLoaded", function() {
+            var map;
+            var center = { lat: 43.651070, lng: -79.347015 }; // Default center
+            var locations = {{{locations}}};
+
+            function initMap() {
+                map = new google.maps.Map(document.getElementById('map'), {
+                    zoom: 10,
+                    center: center
+                });
+
+                locations.forEach(function(location) {
+                    const marker = new google.maps.Marker({
+                        position: { lat: location.lat, lng: location.lng },
+                        map: map,
+                        title: location.companyName // This is already included, now add more data
+                    });
+
+                    const infoWindow = new google.maps.InfoWindow({
+                        content: `
+                            <div>
+                                <h3>${location.companyName}</h3>
+                                <p>Location: ${location.location}</p>
+                                <p>Job Title: ${location.jobTitle}</p>
+                                <p>Date Posted: ${location.datePosted}</p>
+                            </div>`
+                    });
+
+                    marker.addListener('click', function() {
+                        infoWindow.open(map, marker);
+                    });
+                });
+            }
+            initMap();
+        });
+    </script>
+</head>
+<body>
+    <div id="map" style="height: 500px; width: 100%;"></div>
+    <script>
+        document.write("Total locations displayed: " + locations.length);
+    </script>
+</body>
+</html> 
